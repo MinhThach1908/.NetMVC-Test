@@ -1,0 +1,47 @@
+@model Rental
+
+@{
+    ViewData["Title"] = "Rent Comic Books";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Rent" method="post">
+    <div class="form-group">
+        <label for="CustomerId">Customer</label>
+        <select class="form-control" id="CustomerId" name="CustomerId" required>
+            <option value="">Select Customer</option>
+            @foreach (var customer in Model.Customer)
+            {
+                <option value="@customer.CustomerId">@customer.Fullname</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="RentalDate">Rental Date</label>
+        <input type="date" class="form-control" id="RentalDate" name="RentalDate" required />
+    </div>
+
+    <div class="form-group">
+        <label for="ReturnDate">Return Date</label>
+        <input type="date" class="form-control" id="ReturnDate" name="ReturnDate" required />
+    </div>
+
+    <h4>Available Comic Books</h4>
+    <div class="form-group">
+        @foreach (var comicBook in Model.CustomerId)
+        {
+            <div class="checkbox">
+                <input type="checkbox" id="comicBook_@comicBook.ComicBookId" name="ComicBookIds" value="@comicBook.ComicBookId" />
+                <label for="comicBook_@comicBook.ComicBookId">@comicBook.Title (@comicBook.Author) - $@comicBook.Price per day</label>
+                <div class="form-group">
+                    <label for="Quantity_@comicBook.ComicBookId">Quantity:</label>
+                    <input type="number" class="form-control" id="Quantity_@comicBook.ComicBookId" name="Quantities[@comicBook.ComicBookId]" min="1" value="1" />
+                </div>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary">Rent</button>
+</form>
